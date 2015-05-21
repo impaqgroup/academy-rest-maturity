@@ -1,5 +1,6 @@
 package bookmarks;
 
+import com.mangofactory.swagger.plugin.EnableSwagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +28,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
+@EnableSwagger
 public class Application {
 
     @Bean
@@ -72,19 +74,17 @@ class BookmarkRestController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> add(@PathVariable String userId, @RequestBody Bookmark input) {
-
         this.validateUser(userId);
-
         return accountRepository.findByUsername(userId)
                 .map(account -> {
-                            Bookmark bookmark = bookmarkRepository.save(new Bookmark(account, input.uri, input.description));
+                        Bookmark bookmark = bookmarkRepository.save(new Bookmark(account,
+                                input.uri, input.description));
 
-                            HttpHeaders httpHeaders = new HttpHeaders();
+                        HttpHeaders httpHeaders = new HttpHeaders();
+                        Link forOneBookmark = new BookmarkResource(bookmark).getLink("self");
+                        httpHeaders.setLocation(URI.create(forOneBookmark.getHref()));
 
-                            Link forOneBookmark = new BookmarkResource(bookmark).getLink("self");
-                            httpHeaders.setLocation(URI.create(forOneBookmark.getHref()));
-
-                            return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+                        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
                         }
                 ).get();
     }
