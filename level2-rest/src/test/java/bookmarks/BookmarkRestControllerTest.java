@@ -18,6 +18,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import accounts.Account;
+import accounts.AccountRepository;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;

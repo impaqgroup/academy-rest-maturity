@@ -1,6 +1,7 @@
-package bookmarks;
+package com.impaq.accounts;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.impaq.bookmarks.Bookmark;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,11 @@ public class Account {
     @Id
     @GeneratedValue
     private Long id;
+    
+    @JsonIgnore
+    public String password;
+    public String username;
+
 
     public Set<Bookmark> getBookmarks() {
         return bookmarks;
@@ -35,10 +41,6 @@ public class Account {
     public String getUsername() {
         return username;
     }
-
-    @JsonIgnore
-    public String password;
-    public String username;
 
     public Account(String name, String password) {
         this.username = name;

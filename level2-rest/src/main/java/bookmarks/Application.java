@@ -1,6 +1,9 @@
 // tag::runner[]
 package bookmarks;
 
+import accounts.Account;
+import accounts.AccountRepository;
+
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -43,6 +46,7 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
+    
 }
 // end::runner[]
 
@@ -53,6 +57,13 @@ class BookmarkRestController {
     private final BookmarkRepository bookmarkRepository;
 
     private final AccountRepository accountRepository;
+    
+    @Autowired
+    BookmarkRestController(BookmarkRepository bookmarkRepository,
+                           AccountRepository accountRepository) {
+        this.bookmarkRepository = bookmarkRepository;
+        this.accountRepository = accountRepository;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> add(@PathVariable String userId, @RequestBody Bookmark input) {
@@ -74,25 +85,19 @@ class BookmarkRestController {
     @RequestMapping(value = "/{bookmarkId}", method = RequestMethod.GET)
     Bookmark readBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
         this.validateUser(userId);
-        return this.bookmarkRepository.findOne(bookmarkId);
+        return bookmarkRepository.findOne(bookmarkId);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     Collection<Bookmark> readBookmarks(@PathVariable String userId) {
         this.validateUser(userId);
-        return this.bookmarkRepository.findByAccountUsername(userId);
-    }
-
-    @Autowired
-    BookmarkRestController(BookmarkRepository bookmarkRepository,
-                           AccountRepository accountRepository) {
-        this.bookmarkRepository = bookmarkRepository;
-        this.accountRepository = accountRepository;
+        return bookmarkRepository.findByAccountUsername(userId);
     }
 
     private void validateUser(String userId) {
-        this.accountRepository.findByUsername(userId).orElseThrow(
-                () -> new UserNotFoundException(userId));
+        if (accountRepository.findByUsername(userId) == null) {
+            throw new UserNotFoundException(userId);
+        }
     }
 }
 

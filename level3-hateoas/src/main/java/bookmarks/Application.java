@@ -1,5 +1,8 @@
 package bookmarks;
 
+import accounts.Account;
+import accounts.AccountRepository;
+
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

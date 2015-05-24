@@ -1,6 +1,7 @@
-package bookmarks;
+package com.impaq.bookmarks;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.impaq.accounts.Account;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,10 @@ public class Bookmark {
     @GeneratedValue
     private Long id;
 
+    public String uri;
+
+    public String description;
+
     Bookmark() { // jpa only
     }
 
@@ -26,9 +31,6 @@ public class Bookmark {
         this.description = description;
         this.account = account;
     }
-
-    public String uri;
-    public String description;
 
     public Account getAccount() {
         return account;
