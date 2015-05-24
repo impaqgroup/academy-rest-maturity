@@ -3,8 +3,6 @@ package com.impaq.bookmarks.resources;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.bind.annotation.*;
 
 import com.impaq.accounts.Account;
@@ -15,33 +13,22 @@ import com.impaq.rest.AccountNotFoundException;
 import com.impaq.rest.UserNotFoundException;
 
 
-//@RestController
-//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "request")
-public class BookmarkRestResource {
+@RestController
+@RequestMapping("/{userId}/bookmarks")
+public class BookmarkCollectionResource {
     
     private BookmarkRepository bookmarkRepository;
     private AccountRepository accountRepository;
-    
-    private Long bookmarkId;
-    private String userId;
 
-    public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public void setBookmarkId(Long bookmarkId) {
-		this.bookmarkId = bookmarkId;
-	}
-
-	@Autowired
-    public BookmarkRestResource(BookmarkRepository bookmarkRepository,
+    @Autowired
+    public BookmarkCollectionResource(BookmarkRepository bookmarkRepository,
                            AccountRepository accountRepository) {
         this.bookmarkRepository = bookmarkRepository;
         this.accountRepository = accountRepository;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Bookmark add(@RequestBody Bookmark input) {
+    public Bookmark add(@PathVariable String userId, @RequestBody Bookmark input) {
         validateUser(userId);
         Account account = accountRepository.findByUsername(userId);
         if (account == null) {

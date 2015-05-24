@@ -1,4 +1,4 @@
-package com.impaq.config;
+package com.impaq.rest;
 
 
 public class AccountNotFoundException extends RuntimeException {

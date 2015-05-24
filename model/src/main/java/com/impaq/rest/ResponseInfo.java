@@ -4,6 +4,10 @@ public class ResponseInfo {
     private boolean error;
     private String errorInfo;
     
+    public ResponseInfo() {
+        
+    }
+    
     public ResponseInfo(boolean error, String errorInfo) {
         this.error = error;
         this.errorInfo = errorInfo;

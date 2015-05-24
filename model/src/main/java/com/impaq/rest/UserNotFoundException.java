@@ -1,4 +1,4 @@
-package com.impaq.config;
+package com.impaq.rest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

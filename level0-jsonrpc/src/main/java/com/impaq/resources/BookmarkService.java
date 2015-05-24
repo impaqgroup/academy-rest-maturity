@@ -1,11 +1,9 @@
-package com.impaq.bookmarks.resources;
+package com.impaq.resources;
 
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Component;
 
 import com.impaq.accounts.Account;
 import com.impaq.accounts.AccountRepository;
@@ -15,33 +13,20 @@ import com.impaq.rest.AccountNotFoundException;
 import com.impaq.rest.UserNotFoundException;
 
 
-//@RestController
-//@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "request")
-public class BookmarkRestResource {
+@Component
+public class BookmarkService {
     
     private BookmarkRepository bookmarkRepository;
     private AccountRepository accountRepository;
-    
-    private Long bookmarkId;
-    private String userId;
 
-    public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public void setBookmarkId(Long bookmarkId) {
-		this.bookmarkId = bookmarkId;
-	}
-
-	@Autowired
-    public BookmarkRestResource(BookmarkRepository bookmarkRepository,
+    @Autowired
+    private BookmarkService(BookmarkRepository bookmarkRepository,
                            AccountRepository accountRepository) {
         this.bookmarkRepository = bookmarkRepository;
         this.accountRepository = accountRepository;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public Bookmark add(@RequestBody Bookmark input) {
+    public Bookmark add(String userId, Bookmark input) {
         validateUser(userId);
         Account account = accountRepository.findByUsername(userId);
         if (account == null) {
@@ -50,28 +35,24 @@ public class BookmarkRestResource {
         return bookmarkRepository.save(new Bookmark(account, input.getUri(), input.getDescription()));
     }
     
-    @RequestMapping(value = "/get",method = RequestMethod.POST)
-    public Collection<Bookmark> readBookmarks(@PathVariable String userId) {
+    public Collection<Bookmark> readBookmarks(String userId) {
         this.validateUser(userId);
         return bookmarkRepository.findByAccountUsername(userId);
     }
 
-    @RequestMapping(value = "/{bookmarkId}", method = RequestMethod.POST)
-    public Bookmark readBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
+    public Bookmark readBookmark(String userId, Long bookmarkId) {
         this.validateUser(userId);
         return bookmarkRepository.findOne(bookmarkId);
     }
     
-    @RequestMapping(value = "/{bookmarkId}/update", method = RequestMethod.POST)
-    public Bookmark updateBookmark(@PathVariable String userId, @PathVariable Long bookmarkId, @RequestBody Bookmark input) {
+    public Bookmark updateBookmark(String userId, Long bookmarkId, Bookmark input) {
         this.validateUser(userId);
         Bookmark bookmark = bookmarkRepository.findOne(bookmarkId);
         bookmark.description = input.getDescription();
         return bookmarkRepository.save(bookmark);
     }
     
-    @RequestMapping(value = "/{bookmarkId}/delete", method = RequestMethod.POST)
-    public void deleteBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
+    public void deleteBookmark(String userId, Long bookmarkId) {
         this.validateUser(userId);
         bookmarkRepository.delete(bookmarkId);
     }
