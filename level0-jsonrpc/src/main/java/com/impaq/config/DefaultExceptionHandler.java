@@ -1,4 +1,4 @@
-package com.impaq.rest;
+package com.impaq.config;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,16 +1,20 @@
-package bookmarks;
+package com.impaq;
 
-import accounts.Account;
-import accounts.AccountRepository;
+import com.impaq.accounts.Account;
+import com.impaq.accounts.AccountRepository;
+import com.impaq.bookmarks.Bookmark;
+import com.impaq.bookmarks.BookmarkRepository;
 
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.hateoas.Resources;
@@ -29,9 +33,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = {"com.impaq"})
 @EnableAutoConfiguration
 @EnableSwagger
+@EnableJpaRepositories(basePackages = {"com.impaq"})
+@EntityScan(basePackages = {"com.impaq"})
 public class Application {
 
     @Bean
