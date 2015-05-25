@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 @Configuration
 @ComponentScan(basePackages = {"com.impaq"})
@@ -104,6 +105,17 @@ class BookmarkRestController {
     void deleteBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
         this.validateUser(userId);
         bookmarkRepository.delete(bookmarkId);
+    }
+
+    @RequestMapping(value = "/{bookmarkId}", method = RequestMethod.PUT)
+    Bookmark updateBookmark(@PathVariable String userId, @PathVariable Long bookmarkId, @RequestBody Bookmark update) {
+        this.validateUser(userId);
+        return this.accountRepository.findByUsername(userId).map(account -> {
+            Bookmark one = this.bookmarkRepository.findOne(bookmarkId);
+            one.description = update.getDescription();
+            one.uri = update.getUri();
+            return bookmarkRepository.save(one);
+        }).get();
     }
 
     private void validateUser(String userId) {

@@ -28,9 +28,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -132,11 +130,25 @@ public class BookmarkRestControllerTest {
     }
 
     @Test
-    public void deleteBookmark() throws Exception{
-        mockMvc.perform(delete("/" + userName + "/bookmarks/" +this.bookmarkList.get(0).getId()))
+    public void deleteBookmark() throws Exception {
+        mockMvc.perform(delete("/" + userName + "/bookmarks/" + this.bookmarkList.get(0).getId()))
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    public void updateBookmark() throws Exception {
+        String bookmarkJson = json(new Bookmark(
+                this.account, "http://spring.io/guides", "a bookmark to the best guides for Spring"));
+        mockMvc.perform(put("/" + userName + "/bookmarks/" + this.bookmarkList.get(0).getId())
+                .contentType(contentType)
+                .content(bookmarkJson))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.id", is(this.bookmarkList.get(0).getId().intValue())))
+                .andExpect(jsonPath("$.uri", is("http://spring.io/guides")))
+                .andExpect(jsonPath("$.description", is("a bookmark to the best guides for Spring")));
+
+    }
 
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
