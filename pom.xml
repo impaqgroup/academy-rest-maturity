@@ -17,7 +17,7 @@
 	<modules>
 		<module>model</module>
 		<module>level0-jsonrpc</module>
-		<module>level1-resource</module>
+		<module>level1-resources</module>
 		<module>level2-rest</module>
 		<module>level3-hateoas</module>
 	</modules>
