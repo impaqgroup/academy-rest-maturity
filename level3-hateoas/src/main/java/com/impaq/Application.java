@@ -4,7 +4,6 @@ import com.impaq.accounts.Account;
 import com.impaq.accounts.AccountRepository;
 import com.impaq.bookmarks.Bookmark;
 import com.impaq.bookmarks.BookmarkRepository;
-
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

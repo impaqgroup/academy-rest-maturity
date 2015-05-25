@@ -1,5 +1,10 @@
 package bookmarks;
 
+import com.impaq.Application;
+import com.impaq.accounts.Account;
+import com.impaq.accounts.AccountRepository;
+import com.impaq.bookmarks.Bookmark;
+import com.impaq.bookmarks.BookmarkRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,16 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import accounts.Account;
-import accounts.AccountRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,8 +30,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-
-import com.impaq.Application;
 
 /**
  * @author Josh Long

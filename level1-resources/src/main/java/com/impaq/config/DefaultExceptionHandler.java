@@ -1,14 +1,13 @@
 package com.impaq.config;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.impaq.rest.ResponseInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.impaq.rest.ResponseInfo;
+import javax.servlet.http.HttpServletRequest;
 
 
 @ControllerAdvice

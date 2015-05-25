@@ -5,7 +5,6 @@ import com.impaq.accounts.Account;
 import com.impaq.accounts.AccountRepository;
 import com.impaq.bookmarks.Bookmark;
 import com.impaq.bookmarks.BookmarkRepository;
-
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -52,7 +51,7 @@ public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-    
+
 }
 // end::runner[]
 
@@ -63,7 +62,7 @@ class BookmarkRestController {
     private final BookmarkRepository bookmarkRepository;
 
     private final AccountRepository accountRepository;
-    
+
     @Autowired
     BookmarkRestController(BookmarkRepository bookmarkRepository,
                            AccountRepository accountRepository) {
@@ -76,14 +75,14 @@ class BookmarkRestController {
         this.validateUser(userId);
         return this.accountRepository.findByUsername(userId)
                 .map(account -> {
-                        Bookmark result = bookmarkRepository.save(new Bookmark(account,
-                                input.uri, input.description));
+                    Bookmark result = bookmarkRepository.save(new Bookmark(account,
+                            input.uri, input.description));
 
-                        HttpHeaders httpHeaders = new HttpHeaders();
-                        httpHeaders.setLocation(ServletUriComponentsBuilder
-                                .fromCurrentRequest().path("/{id}")
-                                .buildAndExpand(result.getId()).toUri());
-                        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.setLocation(ServletUriComponentsBuilder
+                            .fromCurrentRequest().path("/{id}")
+                            .buildAndExpand(result.getId()).toUri());
+                    return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
                 }).get();
 
     }
@@ -101,9 +100,8 @@ class BookmarkRestController {
     }
 
     private void validateUser(String userId) {
-        if (accountRepository.findByUsername(userId) == null) {
-            throw new UserNotFoundException(userId);
-        }
+        accountRepository.findByUsername(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
 
