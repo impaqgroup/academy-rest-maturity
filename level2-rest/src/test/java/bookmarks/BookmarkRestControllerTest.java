@@ -28,6 +28,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -129,6 +130,13 @@ public class BookmarkRestControllerTest {
                 .content(bookmarkJson))
                 .andExpect(status().isCreated());
     }
+
+    @Test
+    public void deleteBookmark() throws Exception{
+        mockMvc.perform(delete("/" + userName + "/bookmarks/" +this.bookmarkList.get(0).getId()))
+                .andExpect(status().isNoContent());
+    }
+
 
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

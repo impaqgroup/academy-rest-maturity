@@ -99,6 +99,13 @@ class BookmarkRestController {
         return bookmarkRepository.findByAccountUsername(userId);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(value = "/{bookmarkId}", method = RequestMethod.DELETE)
+    void deleteBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
+        this.validateUser(userId);
+        bookmarkRepository.delete(bookmarkId);
+    }
+
     private void validateUser(String userId) {
         accountRepository.findByUsername(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
