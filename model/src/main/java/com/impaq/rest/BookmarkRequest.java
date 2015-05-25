@@ -1,5 +1,6 @@
 package com.impaq.rest;
 
+import com.impaq.accounts.Account;
 import com.impaq.bookmarks.Bookmark;
 
 public class BookmarkRequest {
@@ -8,8 +9,15 @@ public class BookmarkRequest {
     private Bookmark input;
     private Long bookmarkId;
     private String userId;
+    private Account account;
     
-    public String getMethod() {
+    public Account getAccount() {
+		return account;
+	}
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+	public String getMethod() {
         return method;
     }
     public void setMethod(String method) {

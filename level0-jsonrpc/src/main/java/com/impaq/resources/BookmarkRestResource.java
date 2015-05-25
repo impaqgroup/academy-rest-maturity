@@ -1,5 +1,6 @@
 package com.impaq.resources;
 
+import com.impaq.accounts.AccountRepository;
 import com.impaq.rest.BookmarkRequest;
 import com.impaq.rest.NotSupportedMethodException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class BookmarkRestResource {
 
+	private AccountRepository accountRepository;
     private BookmarkService bookmarkService;
 
     @Autowired
-    private BookmarkRestResource(BookmarkService bookmarkService) {
+    private BookmarkRestResource(BookmarkService bookmarkService, AccountRepository accountRepository) {
         this.bookmarkService = bookmarkService;
+		this.accountRepository = accountRepository;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -35,6 +38,8 @@ public class BookmarkRestResource {
             bookmarkService.deleteBookmark(request.getUserId(), request.getBookmarkId());
         } else if (request.getMethod().equals("GetBookmark")) {
         	content = bookmarkService.readBookmark(request.getUserId(), request.getBookmarkId());
+        } else if (request.getMethod().equals("CreateAccount")) {
+        	content = accountRepository.save(request.getAccount());
         } else {
             throw new NotSupportedMethodException();
         }
