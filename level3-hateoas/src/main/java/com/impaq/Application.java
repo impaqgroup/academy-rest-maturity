@@ -85,14 +85,27 @@ class BookmarkRestController {
         this.validateUser(userId);
         return accountRepository.findByUsername(userId)
                 .map(account -> {
-                        Bookmark bookmark = bookmarkRepository.save(new Bookmark(account,
-                                input.uri, input.description));
+                            Bookmark bookmark = bookmarkRepository.save(new Bookmark(account,
+                                    input.uri, input.description));
 
-                        HttpHeaders httpHeaders = new HttpHeaders();
-                        Link forOneBookmark = new BookmarkResource(bookmark).getLink("self");
-                        httpHeaders.setLocation(URI.create(forOneBookmark.getHref()));
+                            HttpHeaders httpHeaders = new HttpHeaders();
+                            Link forOneBookmark = new BookmarkResource(bookmark).getLink("self");
+                            httpHeaders.setLocation(URI.create(forOneBookmark.getHref()));
 
-                        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+                            return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+                        }
+                ).get();
+    }
+
+    @RequestMapping(value = "/{bookmarkId}", method = RequestMethod.PUT)
+    BookmarkResource update(@PathVariable String userId, @PathVariable Long bookmarkId, @RequestBody Bookmark input) {
+        this.validateUser(userId);
+        return accountRepository.findByUsername(userId)
+                .map(account -> {
+                            Bookmark bookmark = bookmarkRepository.findOne(bookmarkId);
+                            bookmark.uri = input.getUri();
+                            bookmark.description = input.getDescription();
+                            return new BookmarkResource(bookmarkRepository.save(bookmark));
                         }
                 ).get();
     }
@@ -103,6 +116,12 @@ class BookmarkRestController {
         return new BookmarkResource(this.bookmarkRepository.findOne(bookmarkId));
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(value = "/{bookmarkId}", method = RequestMethod.DELETE)
+    void deleteBookmark(@PathVariable String userId, @PathVariable Long bookmarkId) {
+        this.validateUser(userId);
+        bookmarkRepository.delete(bookmarkId);
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     Resources<BookmarkResource> readBookmarks(@PathVariable String userId) {

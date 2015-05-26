@@ -26,8 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -127,6 +126,23 @@ public class BookmarkRestControllerTest {
                 .contentType(contentType)
                 .content(bookmarkJson))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void updateBookmark() throws Exception {
+        String bookmarkJson = json(new Bookmark(
+                this.account, "http://spring.io/guides", "a bookmark to the best guides for Spring"));
+        this.mockMvc.perform(put("/" + userName + "/bookmarks/" + this.bookmarkList.get(0).getId())
+                .contentType(contentType)
+                .content(bookmarkJson))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteSingleBookmark() throws Exception {
+        mockMvc.perform(delete("/" + userName + "/bookmarks/"
+                + this.bookmarkList.get(0).getId()))
+                .andExpect(status().isNoContent());
     }
 
     protected String json(Object o) throws IOException {
